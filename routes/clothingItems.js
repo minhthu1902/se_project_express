@@ -9,16 +9,16 @@ const {
   removeLike,
 } = require("../controllers/clothingItems");
 
-//get all clothing items
+// get all clothing items
 router.get("/", getItems);
 
-//get single clothing item by ID
+// get single clothing item by ID
 router.get("/:itemId", getItem);
 
 // delete a clothing item by ID
 router.delete("/:itemId", deleteItem);
 
-//Post create a new clothing item
+// Post create a new clothing item
 router.post("/", createItem);
 router.delete("/:itemId/likes", removeLike);
 router.put("/:itemId/likes", addLike);
