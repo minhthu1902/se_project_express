@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 //Public routes
-app.post("/signup", createUser);
-app.post("/signin", login);
+// app.post("/signup", createUser);
+// app.post("/signin", login);
 
 //Protected routes
 app.use("/users", usersRouter);
