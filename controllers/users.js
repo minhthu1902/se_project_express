@@ -1,12 +1,17 @@
 const User = require("../models/user");
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  SERVER_ERROR,
+  CONFLICT,
+} = require("../utils/errors");
 
-// getUsers - returns all users
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: "Something went wrong" });
+      return res.status(SERVER_ERROR).send({ message: "Something went wrong" });
     });
 };
 
@@ -19,12 +24,12 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: "User not found" });
+        return res.status(NOT_FOUND).send({ message: "User not found" });
       }
       if (err.name === "CastError") {
-        return res.status(400).send({ message: "Invalid user id" });
+        return res.status(BAD_REQUEST).send({ message: "Invalid user id" });
       }
-      return res.status(500).send({ message: "Something went wrong" });
+      return res.status(SERVER_ERROR).send({ message: "Something went wrong" });
     });
 };
 
@@ -37,12 +42,12 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
+        return res.status(BAD_REQUEST).send({ message: err.message });
       }
       if (err.code === 11000) {
-        return res.status(409).send({ message: "User already exists" });
+        return res.status(CONFLICT).send({ message: "User already exists" });
       }
-      return res.status(500).send({ message: "Something went wrong" });
+      return res.status(SERVER_ERROR).send({ message: "Something went wrong" });
     });
 };
 

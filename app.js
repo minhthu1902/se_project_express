@@ -1,31 +1,40 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/auth");
 
+const app = express();
 const { PORT = 3001 } = process.env;
 // const cors = require("cors");
 
-//importing routers
+// importing routers
+app.use(express.json());
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133",
+  };
+  next();
+});
+
+app.use("/", mainRouter);
 // const itemsRouter = require("./routes/clothingItems");
 // const usersRouter = require("./routes/users");
 
-//importing middlewares and controllers
+// importing middlewares and controllers
 // const auth = require("./middlewares/auth");
 // const { createUser, login } = require("./controllers/users");
 // const { NOT_FOUND } = require("./utils/errors");
 
-//middlewares
+// middlewares
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(cors());
 
-//Public routes
+// Public routes
 // app.post("/signup", createUser);
 // app.post("/signin", login);
 
-//Protected routes
+// Protected routes
 // app.use("/users", usersRouter);
 // app.use(
 //   "/items",
