@@ -1,16 +1,36 @@
-# WTWR (What to Wear?): Back End
-The back-end project is focused on creating a server for the WTWR application. In this project, we will learn deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
+## Introduction
+The WTWR (What to Wear?) Backend API serves as the server-side component of a weather-based clothing recommendation application. This project is designed to help users make informed decisions about their daily outfits based on weather conditions. The backend handles user authentication, manages clothing items, and provides secure API endpoints for the frontend application. Built with Node.js and Express.js, it implements RESTful API principles and uses MongoDB for data persistence. The application features robust user authentication using JSON Web Tokens (JWT), secure password hashing, and comprehensive error handling. Users can create accounts, manage their clothing items (add, delete, like), and receive personalized clothing recommendations. This project demonstrates modern backend development practices, including modular architecture, middleware implementation, and secure API design.
 
+Key Features:
+- Secure user authentication and authorization system
+- RESTful API endpoints for clothing item management
+- MongoDB database integration for efficient data storage
+- Custom error handling and input validation
+- Weather-based clothing recommendations logic
 
-## Running the Project
-`npm run start` — to launch the server 
+## Features
+- User authentication and authorization
+- Clothing item management (create, read, update, delete)
+- Error handling
+- Data validation
+- MongoDB database integration
+- API endpoints for user and clothing item operations
 
-`npm run dev` — to launch the server with the hot reload feature
+## Technologies and Tools
+- **Node.js** - Runtime environment
+- **Express.js** (v4.21.2) - Web framework
+- **MongoDB** - Database
+- **Mongoose** - ODM (Object Data Modeling)
+- **ESLint** (v8) - Linting utility
+- **Prettier** (v2) - Code formatting
+- **Nodemon** - Development hot-reload
+- **JSON Web Token** - Authentication
 
-### Testing
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
+## Getting Started
 
-# Technologies Used:
-nodejs
-mongodb
-express
+### Prerequisites
+- Node.js installed
+- MongoDB installed and running
+- Git installed
+
+### Installation
