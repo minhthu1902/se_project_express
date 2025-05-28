@@ -6,7 +6,8 @@ const { NOT_FOUND } = require("../utils/errors");
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
 
-router.use((NOT_FOUND).send({ message: "Router not found" });
+router.use((req, res) => {
+  res.status(NOT_FOUND).send({ message: "Route not found" });
 });
 
 // const { login, createUser } = require("../controllers/users");
