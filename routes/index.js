@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const clothingItem = require("./clothingItems");
 const userRouter = require("./users");
-const { UNAUTHORIZED } = require("../utils/errors");
+const { NOT_FOUND } = require("../utils/errors");
 
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
 
 router.use((req, res) => {
-  res.status(UNAUTHORIZED).send({ message: "Router not found" });
+  res.status(NOT_FOUND).send({ message: "Route not found" });
 });
 
 // const { login, createUser } = require("../controllers/users");

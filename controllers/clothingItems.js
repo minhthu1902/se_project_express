@@ -4,7 +4,6 @@ const {
   SERVER_ERROR,
   FORBIDDEN,
 } = require("../utils/errors");
-
 const ClothingItem = require("../models/clothingItem");
 
 // GET /items
@@ -42,24 +41,24 @@ const createItem = (req, res) => {
 
 // GET /items/:itemId
 
-const getItem = (req, res) => {
-  const { itemId } = req.params;
-  ClothingItem.findById(itemId)
-    .orFail()
-    .then((item) => res.status(200).send(item))
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "Item not found" });
-      }
-      if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
-      }
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error occurred on the server" });
-    });
-};
+// const getItem = (req, res) => {
+//   const { itemId } = req.params;
+//   ClothingItem.findById(itemId)
+//     .orFail()
+//     .then((item) => res.status(200).send(item))
+//     .catch((err) => {
+//       console.error(err);
+//       if (err.name === "DocumentNotFoundError") {
+//         return res.status(NOT_FOUND).send({ message: "Item not found" });
+//       }
+//       if (err.name === "CastError") {
+//         return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
+//       }
+//       return res
+//         .status(SERVER_ERROR)
+//         .send({ message: "An error occurred on the server" });
+//     });
+// };
 
 // DELETE /items/:itemId
 
@@ -139,7 +138,6 @@ const removeLike = (req, res) => {
 module.exports = {
   getItems,
   createItem,
-  getItem,
   addLike,
   removeLike,
   deleteItem,
