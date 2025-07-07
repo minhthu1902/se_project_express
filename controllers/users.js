@@ -19,7 +19,7 @@ const login = (req, res) => {
       .send({ message: "Email and password are required" });
   }
 
-  return User.findUserCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -46,26 +46,29 @@ const createUser = (req, res) => {
       .status(BAD_REQUEST)
       .send({ message: "Email and password are required" });
   }
-  return bcrypt
-    .hash(password, 10)
-    .then((hash) => User.create({ name, avatar, email, password: hash }))
-    .then((user) => {
-      const { password: hashedPassword, ...userWithoutPassword } =
-        user.toObject();
-      res.status(201).send(userWithoutPassword);
-    })
-    .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({ message: err.message });
-      }
-      if (err.code === 11000) {
-        return res.status(CONFLICT).send({ message: "User already exists" });
-      }
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error occurred on the server " });
-    });
+  return (
+    bcrypt
+      // Hash the password before saving the user. Bcrypt will hash the password and store it securely under something like $2a$10$...instead of plain text.
+      .hash(password, 10)
+      .then((hash) => User.create({ name, avatar, email, password: hash }))
+      .then((user) => {
+        const { password: hashedPassword, ...userWithoutPassword } =
+          user.toObject();
+        res.status(201).send(userWithoutPassword);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.name === "ValidationError") {
+          return res.status(BAD_REQUEST).send({ message: err.message });
+        }
+        if (err.code === 11000) {
+          return res.status(CONFLICT).send({ message: "User already exists" });
+        }
+        return res
+          .status(SERVER_ERROR)
+          .send({ message: "An error occurred on the server " });
+      })
+  );
 };
 
 // Get users/me

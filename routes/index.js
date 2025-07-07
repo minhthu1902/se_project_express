@@ -10,9 +10,9 @@ router.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Route not found" });
 });
 
-// const { login, createUser } = require("../controllers/users");
+const { login, createUser } = require("../controllers/users");
 
-// router.post("/signup", createUser);
-// router.post("/signin", login);
+router.post("/signup", createUser);
+router.post("/signin", login);
 
 module.exports = router;

@@ -1,14 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
-const mainRouter = require("./routes/auth");
-
+const mainRouter = require("./routes/index");
+// Importing necessary modules
 const app = express();
 const { PORT = 3001 } = process.env;
-const cors = require("cors");
-
-// importing routers
-app.use(express.json());
-
 app.use((req, res, next) => {
   req.user = {
     _id: "5d8b8592978f8bd833ca8133",
@@ -19,7 +15,6 @@ app.use((req, res, next) => {
 app.use("/", mainRouter);
 const itemsRouter = require("./routes/clothingItems");
 const usersRouter = require("./routes/users");
-
 // importing middlewares and controllers
 const auth = require("./middlewares/auth");
 const { createUser, login } = require("./controllers/users");
@@ -61,7 +56,7 @@ app.use((req, res) => {
 });
 
 // Central error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err);
   const { statusCode = 500, message } = err;
 
