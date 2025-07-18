@@ -91,9 +91,7 @@ const addLike = (req, res) => {
       }
       return res.send(item);
     })
-    .catch(() => {
-      return res.status(SERVER_ERROR).send({ message: "Error updating likes" });
-    });
+    .catch(() => res.status(SERVER_ERROR).send({ message: "Error updating likes" }));
 };
 
 const removeLike = (req, res) => {
@@ -115,9 +113,7 @@ const removeLike = (req, res) => {
       }
       return res.send(item);
     })
-    .catch(() => {
-      return res.status(SERVER_ERROR).send({ message: "Error updating likes" });
-    });
+    .catch(() => res.status(SERVER_ERROR).send({ message: "Error updating likes" }));
 };
 
 module.exports = {
