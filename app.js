@@ -25,15 +25,6 @@ mongoose
   })
   .catch(console.error);
 
-// Central error handling middleware
-app.use((err, req, res) => {
-  console.error(err);
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500 ? "An error occurred on the server" : message,
-  });
-});
-
 // 404 handler (must be last)
 app.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Requested resource not found" });

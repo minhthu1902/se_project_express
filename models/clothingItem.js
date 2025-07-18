@@ -7,7 +7,6 @@ const clothingItemSchema = new mongoose.Schema({
     required: true,
     minlength: 2,
     maxlength: 30,
-    unique: true, // Name should be unique
   },
   weather: {
     type: String, // URL of the clothing item image

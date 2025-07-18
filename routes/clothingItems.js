@@ -12,9 +12,6 @@ const {
 // get all clothing items
 router.get("/", getItems);
 
-// get single clothing item by ID
-router.get("/:itemId", getItems);
-
 // Post create a new clothing item
 router.post("/", auth, createItem);
 router.delete("/:itemId/likes", auth, removeLike);

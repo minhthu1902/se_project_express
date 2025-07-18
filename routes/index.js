@@ -1,15 +1,8 @@
 const router = require("express").Router();
 const userRouter = require("./users");
+const clothingItemsRouter = require("./clothingItems");
 const { NOT_FOUND } = require("../utils/errors");
 const { createUser, login } = require("../controllers/users"); // Only once!
-
-console.log("Routes index.js loaded"); // Add this line
-
-// Test route to see if routes are working
-router.get("/test", (req, res) => {
-  console.log("Test route hit");
-  res.send({ message: "Test route working" });
-});
 
 // Signup route with debug log
 router.post("/signup", (req, res, next) => {
@@ -24,6 +17,7 @@ router.post("/signin", (req, res, next) => {
 }, login);
 // User routes
 router.use("/users", userRouter);
+router.use("/items", clothingItemsRouter);
 // Catch-all route for undefined routes (404)
 router.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Route not found" });
