@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const {
   BAD_REQUEST,
   NOT_FOUND,
@@ -5,7 +6,7 @@ const {
   FORBIDDEN,
 } = require("../utils/errors");
 const ClothingItem = require("../models/clothingItem");
-const mongoose = require("mongoose");
+
 
 // NOTE: Always validate ObjectId before querying DB to avoid 400/500 errors and return 404 if invalid
 // NOTE: Must return 404 (NOT_FOUND) if itemId is invalid or not found, not 400
@@ -50,7 +51,7 @@ const deleteItem = (req, res) => {
     return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
   }
 
-  ClothingItem.findById(itemId)
+  return ClothingItem.findById(itemId) // <- add return here, if-statement does not run there is no return for the rest of the function
     .orFail()
     .then((item) => {
       // NOTE: If user is not the owner, return 403 (Forbidden)
@@ -79,7 +80,7 @@ const addLike = (req, res) => {
     return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
   }
 
-  ClothingItem.findByIdAndUpdate(
+  return ClothingItem.findByIdAndUpdate( // <- add return here, if-statement does not run there is no return for the rest of the function
     itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
@@ -103,7 +104,7 @@ const removeLike = (req, res) => {
     return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
   }
 
-  ClothingItem.findByIdAndUpdate(
+  return ClothingItem.findByIdAndUpdate( // <- add return here, if-statement does not run there is no return for the rest of the function
     itemId,
     { $pull: { likes: req.user._id } },
     { new: true }
