@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
+const { errorHandler } = require("./middlewares/error-handler");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -16,6 +17,9 @@ const { NOT_FOUND } = require("./utils/errors");
 
 // Main router for all routes
 app.use(mainRouter);
+
+// Error handler middleware
+app.use(errorHandler);
 
 // Connect to MongoDB
 mongoose
