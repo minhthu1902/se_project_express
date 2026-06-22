@@ -1,6 +1,11 @@
 ## Introduction
 The WTWR (What to Wear?) Backend API serves as the server-side component of a weather-based clothing recommendation application. This project is designed to help users make informed decisions about their daily outfits based on weather conditions. The backend handles user authentication, manages clothing items, and provides secure API endpoints for the frontend application. Built with Node.js and Express.js, it implements RESTful API principles and uses MongoDB for data persistence. The application features robust user authentication using JSON Web Tokens (JWT), secure password hashing, and comprehensive error handling. Users can create accounts, manage their clothing items (add, delete, like), and receive personalized clothing recommendations. This project demonstrates modern backend development practices, including modular architecture, middleware implementation, and secure API design.
 
+## Repository Links
+
+- **Frontend Repository**: https://github.com/minhthu1902/se_project_react
+- **Deployed App**: https://weatherfashion.duckdns.org
+
 Key Features:
 - Secure user authentication and authorization system
 - RESTful API endpoints for clothing item management
