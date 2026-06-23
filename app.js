@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const { errors: celebrateErrors } = require("celebrate");
 const mainRouter = require("./routes/index");
-const { errorHandler, HttpError } = require("./middlewares/error-handler");
+const { errorHandler } = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
@@ -17,11 +18,8 @@ app.use(cors());
 // Request logging (must come before routes)
 app.use(requestLogger);
 
-// Importing error codes
-const { NOT_FOUND } = require("./utils/errors");
-
 // Crash test route (must be registered before auth routes like /signin and /signup)
-app.get("/crash-test", (req, res) => {
+app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("Server will crash now");
   }, 0);
@@ -30,10 +28,8 @@ app.get("/crash-test", (req, res) => {
 // Main router for all routes
 app.use(mainRouter);
 
-// 404 handler (must call next with an error so error middleware can handle it)
-app.use((req, res, next) => {
-  next(HttpError.notFound("Requested resource not found"));
-});
+// Celebrate validation errors must be converted before the general logger/handler
+app.use(celebrateErrors());
 
 // Error logging (logs errors before sending responses)
 app.use(errorLogger);
@@ -49,9 +45,6 @@ mongoose
   })
   .catch(console.error);
 
-// NOTE: 404 handling is moved above to pass a NotFound error into the
-// centralized error handler so it can be logged and formatted consistently.
-
 // Global error handlers for errors that escape Express middleware
 process.on("uncaughtException", (err) => {
   console.error(
@@ -62,7 +55,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-process.on("unhandledRejection", (reason, promise) => {
+process.on("unhandledRejection", (reason) => {
   console.error(
     new Date().toISOString(),
     "UNHANDLED REJECTION",

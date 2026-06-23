@@ -1,22 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const {
-  BAD_REQUEST,
-  NOT_FOUND,
-  SERVER_ERROR,
-  CONFLICT,
-  UNAUTHORIZED,
-} = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
+const { HttpError } = require("../middlewares/error-handler");
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Email and password are required" });
+    return next(HttpError.badRequest("Email and password are required"));
   }
 
   return User.findUserByCredentials(email, password)
@@ -24,53 +16,45 @@ const login = (req, res) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      const { password: hashedPassword, ...userWithoutPassword } = user.toObject();
+      const { password: hashedPassword, ...userWithoutPassword } =
+        user.toObject();
       res.send({ token, user: userWithoutPassword });
     })
     .catch((err) => {
-      console.error(err);
       if (err.message === "Incorrect email or password") {
-        return res
-          .status(UNAUTHORIZED)
-          .send({ message: "Invalid email or password" });
+        return next(HttpError.unauthorized("Invalid email or password"));
       }
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error occurred on the server" });
+      return next(new HttpError("An error occurred on the server", 500));
     });
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
   if (!email || !password) {
-    return res
-      .status(BAD_REQUEST)
-      .send({ message: "Email and password are required" });
+    return next(HttpError.badRequest("Email and password are required"));
   }
-  bcrypt
+  return bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) => {
-      const { password: hashedPassword, ...userWithoutPassword } = user.toObject();
+      const { password: hashedPassword, ...userWithoutPassword } =
+        user.toObject();
       res.status(201).send(userWithoutPassword);
     })
     .catch((err) => {
-      console.error(err);
       if (err.code === 11000) {
-        return res.status(CONFLICT).send({ message: "User already exists" });
+        return next(HttpError.conflict("User already exists"));
       }
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({ message: err.message });
+        return next(HttpError.badRequest(err.message));
       }
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error occurred on the server" });
+      return next(new HttpError("An error occurred on the server", 500));
     });
 };
 
 // Get users/me
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => {
@@ -78,22 +62,19 @@ const getCurrentUser = (req, res) => {
       res.status(200).send(userWithoutPassword);
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "User not found" });
+        return next(HttpError.notFound("User not found"));
       }
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid user id" });
+        return next(HttpError.badRequest("Invalid user id"));
       }
-      return res
-        .status(SERVER_ERROR)
-        .send({ message: "An error occurred on the server" });
+      return next(new HttpError("An error occurred on the server", 500));
     });
 };
 
 // //PATCH users me update profile
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { name, avatar } = req.body;
 
   User.findByIdAndUpdate(
@@ -107,17 +88,16 @@ const updateUser = (req, res) => {
       res.status(200).send(userWithoutPassword);
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({ message: err.message });
+        return next(HttpError.badRequest(err.message));
       }
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({ message: "User not found" });
+        return next(HttpError.notFound("User not found"));
       }
       if (err.name === "CastError") {
-        return res.status(BAD_REQUEST).send({ message: "Invalid user id" });
+        return next(HttpError.badRequest("Invalid user id"));
       }
-      return res.status(SERVER_ERROR).send({ message: "Something went wrong" });
+      return next(new HttpError("Something went wrong", 500));
     });
 };
 module.exports = {

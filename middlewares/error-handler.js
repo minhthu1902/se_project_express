@@ -28,6 +28,10 @@ class HttpError extends Error {
 }
 
 const errorHandler = (err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   let statusCode = err.statusCode || 500;
   let message = err.message || "Internal server error";
 
@@ -42,6 +46,8 @@ const errorHandler = (err, req, res, next) => {
   res.status(statusCode).json({
     message,
   });
+
+  return null;
 };
 
 module.exports = { HttpError, errorHandler };

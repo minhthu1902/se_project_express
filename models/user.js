@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: true, //this is crucial for the signup function to work
+    unique: true, // this is crucial for the signup function to work
     validate: {
       validator: validator.isEmail,
       message: "You must enter a valid email",
