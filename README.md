@@ -13,6 +13,9 @@ Key Features:
 - Custom error handling and input validation
 - Weather-based clothing recommendations logic
 
+## Project 15 pitch video:
+Check out:
+https://drive.google.com/file/d/115b6sWcGcpIQif1cegQUo15BCfOV-pbx/view?usp=sharing where I described my deployment and testing progress and some challenges I faced while building it.
 ## Features
 - User authentication and authorization
 - Clothing item management (create, read, update, delete)
